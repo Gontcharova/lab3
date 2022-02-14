@@ -19,6 +19,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    CommonFunctions.h \
     IFileCalculateStrategy.h \
     Strategy.h \
     StrategyByFolder.h \

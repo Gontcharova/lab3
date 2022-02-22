@@ -26,7 +26,7 @@ void StrategyByFolder::consoleOutput(const QList<QPair<QString, qint64> > &folde
     auto it2 = foldersAndSizes.begin();
     for (; it1 != foldersAndPercents.end(); it1++, it2++ )
     {
-        ts << qSetFieldWidth(60) << it1->first << qSetFieldWidth(10)  << it2->second / 1024
+        ts << qSetFieldWidth(60) << it1->first << qSetFieldWidth(10)  << it2->second / 1024.0
            << qSetFieldWidth(4)<< "KB";
         if (it1->second < 0) {
             ts << qSetFieldWidth(8) << "< 0.01 %\n";

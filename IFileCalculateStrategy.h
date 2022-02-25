@@ -1,5 +1,6 @@
 #ifndef IFILECALCULATESTRATEGY_H
 #define IFILECALCULATESTRATEGY_H
+#include "Data.h"
 #include <QString>
 /*
     IFileCalculateStrategy - интерфейс всех стратегий.
@@ -10,7 +11,9 @@ class IFileCalculateStrategy
 {
 public:
     IFileCalculateStrategy() = default;
-    virtual void calculate(const QString& path) = 0;
+
+    virtual QList<Data> calculate(const QString& path) = 0;
     virtual ~IFileCalculateStrategy() {}
 };
+
 #endif // IFILECALCULATESTRATEGY_H

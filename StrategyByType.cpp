@@ -5,18 +5,19 @@
 #include <QDebug>
 #include <QTextStream>
 
-void StrategyByType::calculate(const QString &path)
+QList<Data> StrategyByType::calculate(const QString &path)
 {
     QFileInfo folder(path);
     if (!folder.isReadable() || !folder.exists()) {
         qDebug() << "Error! Folder doesn't exist." << Qt::endl;
-        return;
+        return QList<Data>();
     }
     QList<QPair<QString, qint64> > typesAndSizes;
     TypesAndSizes(path, typesAndSizes);
     qint64 total_size = getTotalSizeOfFolder(path);
     auto typesAndPercents = TypesAndPercents(typesAndSizes, total_size);
-    consoleOutput(typesAndSizes, typesAndPercents);
+//    consoleOutput(typesAndSizes, typesAndPercents);
+    return AllToData(typesAndSizes, typesAndPercents);
 }
 
 
@@ -56,6 +57,19 @@ QList<QPair<QString, double> > StrategyByType::TypesAndPercents(const QList<QPai
         TypesAndPercents.append(qMakePair(x.first, total_percent));
     }
     return TypesAndPercents;
+}
+
+QList<Data> StrategyByType::AllToData(const QList<QPair<QString, qint64> > &typesAndSizes, const QList<QPair<QString, double> > &typesAndPercents) const
+{
+    QList<Data> data;
+    auto it1 = typesAndPercents.begin();
+    auto it2 = typesAndSizes.begin();
+    for (; it1 != typesAndPercents.end(); it1++, it2++ )
+    {
+        data.push_back(Data(it1->first, it2->second, it1->second));
+    }
+
+    return data;
 }
 
 void StrategyByType::consoleOutput(const QList<QPair<QString, qint64> > &typesAndSizes, const QList<QPair<QString, double> > &typesAndPercents) const

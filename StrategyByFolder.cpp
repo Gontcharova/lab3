@@ -5,17 +5,18 @@
 #include <QFileInfo>
 #include <QDir>
 
-void StrategyByFolder::calculate(const QString &path)
+QList<Data> StrategyByFolder::calculate(const QString &path)
 {
     QFileInfo folder(path);
     if (!folder.isReadable() || !folder.exists()) {
         qDebug() << "Error! Folder doesn't exist." << Qt::endl;
-        return;
+        return QList<Data>();
     }
     auto foldersAndSizes = FoldersAndSizes(path);
     qint64 total_size = getTotalSizeOfFolder(path);
     auto foldersAndPercents = FoldersAndPercents(foldersAndSizes, total_size);
-    consoleOutput(foldersAndSizes, foldersAndPercents);
+    return AllToData(foldersAndSizes, foldersAndPercents);
+//    consoleOutput(foldersAndSizes, foldersAndPercents);
 }
 
 void StrategyByFolder::consoleOutput(const QList<QPair<QString, qint64> > &foldersAndSizes, const QList<QPair<QString, double> > &foldersAndPercents) const
@@ -67,3 +68,18 @@ QList<QPair<QString, double> > StrategyByFolder::FoldersAndPercents(const QList<
     }
     return foldersListPercentage;
 }
+
+QList<Data> StrategyByFolder::AllToData(const QList<QPair<QString, qint64> > &foldersAndSizes,
+                                        const QList<QPair<QString, double> > &foldersAndPercents) const
+{
+    QList<Data> data;
+    auto it1 = foldersAndPercents.begin();
+    auto it2 = foldersAndSizes.begin();
+    for (; it1 != foldersAndPercents.end(); it1++, it2++ )
+    {
+        data.push_back(Data(it1->first, it2->second, it1->second));
+    }
+
+    return data;
+}
+

@@ -1,6 +1,7 @@
 #ifndef STRATEGY_H
 #define STRATEGY_H
 #include "IFileCalculateStrategy.h"
+#include "Data.h"
 
 class StrategyContext
 {
@@ -9,7 +10,7 @@ public:
     StrategyContext(IFileCalculateStrategy* strategy) : m_strategy(strategy) {}
 
     void setStrategy(IFileCalculateStrategy* strategy);
-    void calculate(const QString& path);
+    QList<Data> calculate(const QString& path);
 
     ~StrategyContext();
 };

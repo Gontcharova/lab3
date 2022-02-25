@@ -20,6 +20,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     CommonFunctions.h \
+    Data.h \
     IFileCalculateStrategy.h \
     Strategy.h \
     StrategyByFolder.h \

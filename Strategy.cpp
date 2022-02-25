@@ -1,4 +1,5 @@
 #include "Strategy.h"
+#include <QList>
 
 void StrategyContext::setStrategy(IFileCalculateStrategy *strategy)
 {
@@ -8,10 +9,10 @@ void StrategyContext::setStrategy(IFileCalculateStrategy *strategy)
     m_strategy = strategy;
 }
 
-void StrategyContext::calculate(const QString &path)
+QList<Data> StrategyContext::calculate(const QString &path)
 {
     if (m_strategy) {
-        m_strategy->calculate(path);
+        return m_strategy->calculate(path);
     }
 }
 

@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
         Explorer.cpp \
+        FileTableModel.cpp \
         Strategy.cpp \
         StrategyByType.cpp \
         main.cpp \
@@ -24,6 +25,7 @@ HEADERS += \
     CommonFunctions.h \
     Data.h \
     Explorer.h \
+    FileTableModel.h \
     IFileCalculateStrategy.h \
     Strategy.h \
     StrategyByFolder.h \

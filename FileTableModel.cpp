@@ -34,7 +34,7 @@ QVariant FileTableModel::data(const QModelIndex& index, int role) const
     case 2: {
         if (m_data[index.row()].m_ratio < 0)
             return "< 0.01 %";
-        else return QString::number(m_data[index.row()].m_ratio * 100, 'f', 2) + " %";
+        else return QString::number(m_data[index.row()].m_ratio, 'f', 2) + " %";
     }
     default: return QVariant();
     }

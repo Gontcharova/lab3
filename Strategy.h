@@ -7,6 +7,7 @@ class StrategyContext
 {
     IFileCalculateStrategy* m_strategy = nullptr;
 public:
+    StrategyContext() = default;
     StrategyContext(IFileCalculateStrategy* strategy) : m_strategy(strategy) {}
 
     void setStrategy(IFileCalculateStrategy* strategy);

@@ -26,6 +26,7 @@ HEADERS += \
     Data.h \
     Explorer.h \
     FileTableModel.h \
+    FileTableModel.h \
     IFileCalculateStrategy.h \
     Strategy.h \
     StrategyByFolder.h \

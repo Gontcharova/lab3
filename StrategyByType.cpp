@@ -5,19 +5,20 @@
 #include <QDebug>
 #include <QTextStream>
 
-QList<Data> StrategyByType::calculate(const QString &path)
+void StrategyByType::calculate(const QString &path)
 {
     QFileInfo folder(path);
     if (!folder.isReadable() || !folder.exists()) {
         qDebug() << "Error! Folder doesn't exist." << Qt::endl;
-        return QList<Data>();
+        return;
     }
     QList<QPair<QString, qint64> > typesAndSizes;
     TypesAndSizes(path, typesAndSizes);
     qint64 total_size = getTotalSizeOfFolder(path);
     auto typesAndPercents = TypesAndPercents(typesAndSizes, total_size);
 //    consoleOutput(typesAndSizes, typesAndPercents);
-    return AllToData(typesAndSizes, typesAndPercents);
+    QList<Data> data = AllToData(typesAndSizes, typesAndPercents);
+    onFinish(data);
 }
 
 

@@ -9,10 +9,10 @@ void StrategyContext::setStrategy(IFileCalculateStrategy *strategy)
     m_strategy = strategy;
 }
 
-QList<Data> StrategyContext::calculate(const QString &path)
+void StrategyContext::calculate(const QString &path)
 {
     if (m_strategy) {
-        return m_strategy->calculate(path);
+        m_strategy->calculate(path);
     }
 }
 

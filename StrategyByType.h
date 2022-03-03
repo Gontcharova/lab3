@@ -8,7 +8,7 @@ class StrategyByType : public IFileCalculateStrategy
 {
 public:
     StrategyByType() {}
-    QList<Data> calculate(const QString &path) override;
+    void calculate(const QString &path) override;
     virtual ~StrategyByType() {}
     void consoleOutput(const QList<QPair<QString, qint64> >& typesAndSizes,
                        const QList<QPair<QString, double> >& typesAndPercents) const;

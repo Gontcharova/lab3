@@ -11,7 +11,7 @@ public:
     StrategyContext(IFileCalculateStrategy* strategy) : m_strategy(strategy) {}
 
     void setStrategy(IFileCalculateStrategy* strategy);
-    QList<Data> calculate(const QString& path);
+    void calculate(const QString& path);
 
     ~StrategyContext();
 };

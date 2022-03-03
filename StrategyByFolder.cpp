@@ -5,17 +5,18 @@
 #include <QFileInfo>
 #include <QDir>
 
-QList<Data> StrategyByFolder::calculate(const QString &path)
+void StrategyByFolder::calculate(const QString &path)
 {
     QFileInfo folder(path);
     if (!folder.isReadable() || !folder.exists()) {
         qDebug() << "Error! Folder doesn't exist." << Qt::endl;
-        return QList<Data>();
+        return;
     }
     auto foldersAndSizes = FoldersAndSizes(path);
     qint64 total_size = getTotalSizeOfFolder(path);
     auto foldersAndPercents = FoldersAndPercents(foldersAndSizes, total_size);
-    return AllToData(foldersAndSizes, foldersAndPercents);
+    QList<Data> data = AllToData(foldersAndSizes, foldersAndPercents);
+    onFinish(data);
 //    consoleOutput(foldersAndSizes, foldersAndPercents);
 }
 

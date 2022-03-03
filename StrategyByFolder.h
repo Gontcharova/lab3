@@ -9,7 +9,7 @@ class StrategyByFolder : public IFileCalculateStrategy
 {
 public:
     StrategyByFolder() = default;
-    QList<Data> calculate(const QString& path) override;
+    void calculate(const QString& path) override;
     virtual ~StrategyByFolder() {}
     void consoleOutput(const QList<QPair<QString, qint64> >& foldersAndSizes,
                        const QList<QPair<QString, double> >& foldersAndPercents) const;

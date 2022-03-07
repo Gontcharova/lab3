@@ -3,35 +3,27 @@
 #include "Data.h"
 #include <QString>
 #include <QList>
-#include "Observer.h"
+#include <QObject>
 /*
     IFileCalculateStrategy - интерфейс всех стратегий.
     calculate - чистый виртуальный метод. Через этот метод происходит выполнение алгоритма соответсвующей стратегии.
 */
 
-class IFileCalculateStrategy
+class IFileCalculateStrategy :  public QObject
 {
-private:
-    QList<Observer* > observers;
+    Q_OBJECT
+signals:
+    void OnFinish(const QList<Data>& data);
 public:
-    IFileCalculateStrategy() = default;
-    void subscribeToEvent(Observer* observer)
-    {
-        if (observer)
-            observers.push_back(observer);
-    }
-    void unsubscribe(Observer* observer)
-    {
-        if (observer)
-            observers.removeOne(observer);
-    }
-    void onFinish(const QList<Data>& data)
-    {
-        for (auto& obs : observers)
-            obs->updateData(data);
-    }
+    IFileCalculateStrategy(QObject* parent = nullptr)  : QObject(parent) {}
     virtual void calculate(const QString& path) = 0;
+
     virtual ~IFileCalculateStrategy() {}
+protected:
+    QList<Data> AllToData(const QList<QPair<QString, qint64> >&nameAndSizes,
+                          const QList<QPair<QString, double> > &nameAndPercents) const;
+    QList<QPair<QString, double> > namesAndPercents(const QList<QPair<QString, qint64> >& namesAndSizes,
+                                                      const qint64& totalSize) const;
 };
 
 #endif // IFILECALCULATESTRATEGY_H

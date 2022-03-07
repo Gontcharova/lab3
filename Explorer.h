@@ -3,7 +3,6 @@
 #include "FileTableModel.h"
 #include "Strategy.h"
 #include "IFileCalculateStrategy.h"
-#include "Observer.h"
 #include "ChartModel.h"
 #include <QWidget>
 #include <QItemSelection>
@@ -27,12 +26,16 @@ protected slots:
     void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 private:
     Ui::Explorer* ui;
-    QFileSystemModel* tree_model;
-    QList<Observer* > observers;
 
+    // стратегии
     IFileCalculateStrategy* current_strategy;
     IFileCalculateStrategy* by_folders;
     IFileCalculateStrategy* by_types;
+    // модели
+    QFileSystemModel* tree_model;
+    FileTableModel* table_model;
+    ChartModel* pie_chart;
+    ChartModel* bar_chart;
 
     QString folder_path;
 };

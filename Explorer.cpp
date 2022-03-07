@@ -17,13 +17,17 @@ Explorer::Explorer(QWidget *parent) :
     ui->treeView->setModel(tree_model);
     ui->treeView->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    observers.push_back(new FileTableModel(ui->stackedWidget->layout()));
-    observers.push_back(new PieChart(ui->stackedWidget->layout()));
-    observers.push_back(new BarChart(ui->stackedWidget->layout()));
-    for (auto& x : observers) {
-        by_folders->subscribeToEvent(x);
-        by_types->subscribeToEvent(x);
-    }
+    table_model = new FileTableModel(ui->stackedWidget->layout());
+    pie_chart = new PieChart(ui->stackedWidget->layout());
+    bar_chart = new BarChart(ui->stackedWidget->layout());
+
+    connect(by_folders, &IFileCalculateStrategy::OnFinish, table_model, &FileTableModel::updateData);
+    connect(by_folders, &IFileCalculateStrategy::OnFinish, pie_chart, &ChartModel::updateData);
+    connect(by_folders, &IFileCalculateStrategy::OnFinish, bar_chart, &ChartModel::updateData);
+
+    connect(by_types, &IFileCalculateStrategy::OnFinish, table_model, &FileTableModel::updateData);
+    connect(by_types, &IFileCalculateStrategy::OnFinish, pie_chart, &ChartModel::updateData);
+    connect(by_types, &IFileCalculateStrategy::OnFinish, bar_chart, &ChartModel::updateData);
 
     connect(ui->displayBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Explorer::changeDisplay);
     connect(ui->groupBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &Explorer::changeGrouping);
@@ -35,6 +39,9 @@ Explorer::~Explorer()
 {
     delete ui;
     delete tree_model;
+    delete table_model;
+    delete pie_chart;
+    delete bar_chart;
     delete by_folders;
     delete by_types;
 }

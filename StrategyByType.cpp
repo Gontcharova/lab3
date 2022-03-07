@@ -15,10 +15,10 @@ void StrategyByType::calculate(const QString &path)
     QList<QPair<QString, qint64> > typesAndSizes;
     TypesAndSizes(path, typesAndSizes);
     qint64 total_size = getTotalSizeOfFolder(path);
-    auto typesAndPercents = TypesAndPercents(typesAndSizes, total_size);
+    auto typesAndPercents = namesAndPercents(typesAndSizes, total_size);
 //    consoleOutput(typesAndSizes, typesAndPercents);
     QList<Data> data = AllToData(typesAndSizes, typesAndPercents);
-    onFinish(data);
+    emit OnFinish(data);
 }
 
 
@@ -41,36 +41,6 @@ void StrategyByType::TypesAndSizes(const QString &path, QList<QPair<QString, qin
                 typesAndSizes.append(qMakePair(x.suffix().toLower(), x.size()));
         }
     }
-}
-
-QList<QPair<QString, double> > StrategyByType::TypesAndPercents(const QList<QPair<QString, qint64> > &typesAndSizes, const qint64 &totalSize) const
-{
-    double total_percent;
-    QList<QPair<QString, double> > TypesAndPercents;
-    for (auto& x : typesAndSizes) {
-        if (totalSize != 0) {
-            total_percent = double(x.second * 100) / totalSize;
-            if (total_percent < 0.01 && total_percent != 0)
-                total_percent = -total_percent; // метка для папок меньше 0.01 процента
-        } else {
-            total_percent = 0;
-        }
-        TypesAndPercents.append(qMakePair(x.first, total_percent));
-    }
-    return TypesAndPercents;
-}
-
-QList<Data> StrategyByType::AllToData(const QList<QPair<QString, qint64> > &typesAndSizes, const QList<QPair<QString, double> > &typesAndPercents) const
-{
-    QList<Data> data;
-    auto it1 = typesAndPercents.begin();
-    auto it2 = typesAndSizes.begin();
-    for (; it1 != typesAndPercents.end(); it1++, it2++ )
-    {
-        data.push_back(Data(it1->first, it2->second, it1->second));
-    }
-
-    return data;
 }
 
 void StrategyByType::consoleOutput(const QList<QPair<QString, qint64> > &typesAndSizes, const QList<QPair<QString, double> > &typesAndPercents) const

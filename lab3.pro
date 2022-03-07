@@ -12,6 +12,7 @@ SOURCES += \
         ChartModel.cpp \
         Explorer.cpp \
         FileTableModel.cpp \
+        IFileCalculateStrategy.cpp \
         Strategy.cpp \
         StrategyByType.cpp \
         main.cpp \
@@ -30,7 +31,6 @@ HEADERS += \
     FileTableModel.h \
     FileTableModel.h \
     IFileCalculateStrategy.h \
-    Observer.h \
     Strategy.h \
     StrategyByFolder.h \
     StrategyByType.h

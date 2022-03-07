@@ -1,8 +1,8 @@
 #include "ChartModel.h"
+#include <algorithm>
 
-ChartModel::ChartModel(QLayout *layout)
+ChartModel::ChartModel(QLayout *layout, QObject *parent) : QObject(parent)
 {
-
     model = new QChart();
     view = new QChartView();
     view->setChart(model);
@@ -12,10 +12,10 @@ ChartModel::ChartModel(QLayout *layout)
 
 void ChartModel::updateData(const QList<Data> &data)
 {
-    setChart(data);
+    setDataToModel(data);
 }
 
-void ChartModel::setChart(const QList<Data> &data)
+void ChartModel::setDataToModel(const QList<Data> &data)
 {
     model->setTitle("");
     qint64 total_size = 0;
@@ -27,20 +27,21 @@ void ChartModel::setChart(const QList<Data> &data)
         model->removeAllSeries();
         return;
     }
-    if (data.size() > 8)
+    if (data.size() > 5)
     {
-        QList<Data> data_others;
-        qint64 others = 0;
-        for (int i = 0; i < 8; i++)
+        QList<Data> data_others = data;
+        qint64 others_size = 0;
+        std::sort(std::begin(data_others), std::end(data_others),
+                  [](Data &left, Data &right) {
+            return left.m_size > right.m_size;
+        });
+        for (int i = 5; i < data.size(); i++)
         {
-            data_others.push_back(data.at(i));
+            others_size += data.at(i).m_size;
         }
-        for (int i = 8; i < data.size(); i++)
-        {
-            others += data.at(i).m_size;
-        }
-        data_others.push_back(Data("Others", others,
-                                  (qreal)others * 100 / total_size));
+        data_others.erase(std::begin(data_others) + 5, std::end(data_others));
+        data_others.push_back(Data("Others", others_size,
+                                  (qreal)others_size * 100 / total_size));
         setDataToChart(data_others);
     } else {
         setDataToChart(data);

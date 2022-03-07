@@ -1,23 +1,23 @@
 #ifndef CHARTMODEL_H
 #define CHARTMODEL_H
-#include "Observer.h"
 #include "Data.h"
 #include "QtCharts"
 
 
-class ChartModel : public Observer
+class ChartModel : public QObject
 {
+    Q_OBJECT
 private:
     QChart* model;
     QChartView* view;
+public slots:
+    void updateData(const QList<Data> &data);
 public:
-    ChartModel(QLayout *layout);
-    void setChart(const QList<Data>& data);
-    void updateData(const QList<Data> &data) override;
+    ChartModel(QLayout *layout, QObject *parent = nullptr);
+    void setDataToModel(const QList<Data>& data);
     void setDataToChart(const QList<Data>& data) const;
     virtual QAbstractSeries* dataToSeries(const QList<Data>& data) const = 0;
     virtual ~ChartModel() {}
-
 };
 
 

@@ -14,9 +14,9 @@ void StrategyByFolder::calculate(const QString &path)
     }
     auto foldersAndSizes = FoldersAndSizes(path);
     qint64 total_size = getTotalSizeOfFolder(path);
-    auto foldersAndPercents = FoldersAndPercents(foldersAndSizes, total_size);
+    auto foldersAndPercents = namesAndPercents(foldersAndSizes, total_size);
     QList<Data> data = AllToData(foldersAndSizes, foldersAndPercents);
-    onFinish(data);
+    emit OnFinish(data);
 //    consoleOutput(foldersAndSizes, foldersAndPercents);
 }
 
@@ -51,36 +51,5 @@ QList<QPair<QString, qint64> > StrategyByFolder::FoldersAndSizes(const QString& 
         foldersAndSizesList.append(qMakePair(absolutePath, getTotalSizeOfFolder(absolutePath)));
     }
     return foldersAndSizesList;
-}
-
-QList<QPair<QString, double> > StrategyByFolder::FoldersAndPercents(const QList<QPair<QString, qint64>> &foldersAndSizesList, const qint64 &totalSize) const
-{
-    QList<QPair<QString, double> > foldersListPercentage;
-    double percent;
-    for (auto& x : foldersAndSizesList) {
-        if (totalSize != 0) {
-            percent = double(x.second * 100) / totalSize;
-            if (percent < 0.01 && percent != 0)
-                percent = -percent; // метка для папок меньше 0.01 процента
-        } else {
-            percent = 0;
-        }
-        foldersListPercentage.append(qMakePair(x.first, percent));
-    }
-    return foldersListPercentage;
-}
-
-QList<Data> StrategyByFolder::AllToData(const QList<QPair<QString, qint64> > &foldersAndSizes,
-                                        const QList<QPair<QString, double> > &foldersAndPercents) const
-{
-    QList<Data> data;
-    auto it1 = foldersAndPercents.begin();
-    auto it2 = foldersAndSizes.begin();
-    for (; it1 != foldersAndPercents.end(); it1++, it2++ )
-    {
-        data.push_back(Data(it1->first, it2->second, it1->second));
-    }
-
-    return data;
 }
 

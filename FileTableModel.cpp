@@ -1,9 +1,17 @@
 #include "FileTableModel.h"
+#include <QLayout>
 #include <QLocale>
 
 FileTableModel::FileTableModel(const QList<Data> &data, QObject *parent) : QAbstractTableModel(parent)
 {
     m_data = data;
+}
+
+FileTableModel::FileTableModel(QLayout *l, QObject *parent) : QAbstractTableModel(parent)
+{
+    m_view = new QTableView();
+    m_view->setModel(this);
+    l->addWidget(m_view);
 }
 
 int FileTableModel::rowCount(const QModelIndex &parent) const
@@ -64,4 +72,10 @@ void FileTableModel::setModelData(const QList<Data> &data)
     beginResetModel();
     m_data = data;
     endResetModel();
+}
+
+
+void FileTableModel::updateData(const QList<Data> &data)
+{
+    setModelData(data);
 }

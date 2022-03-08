@@ -2,6 +2,8 @@
 #define EXPLORER_H
 #include "FileTableModel.h"
 #include "Strategy.h"
+#include "IFileCalculateStrategy.h"
+#include "ChartModel.h"
 #include <QWidget>
 #include <QItemSelection>
 #include <QFileSystemModel>
@@ -15,24 +17,27 @@ class Explorer : public QWidget
 {
     Q_OBJECT
 public:
-    enum class GroupedBy {
-        Folders,
-        Types
-    };
     explicit Explorer(QWidget *parent = nullptr);
     void updateDataInModel();
     ~Explorer();
 protected slots:
     void changeGrouping(int index);
+    void changeDisplay(int index);
     void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 private:
     Ui::Explorer* ui;
+
+    // стратегии
+    IFileCalculateStrategy* current_strategy;
+    IFileCalculateStrategy* by_folders;
+    IFileCalculateStrategy* by_types;
+    // модели
     QFileSystemModel* tree_model;
     FileTableModel* table_model;
-    QList<Data> data;
-    StrategyContext* context;
+    ChartModel* pie_chart;
+    ChartModel* bar_chart;
+
     QString folder_path;
-    GroupedBy grouping;
 };
 
 
